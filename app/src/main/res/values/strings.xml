@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HDownloder</string>
+
+    <string name="pause">暂停</string>
+    <string name="wait">等待中</string>
+    <string name="pic">图片</string>
+    <string name="video">视频</string>
+
+
+</resources>

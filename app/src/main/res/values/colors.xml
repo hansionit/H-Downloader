@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="empty_tip_text">#515151</color>
+    <color name="pressed_text">#003d68</color>
+    <color name="layout_pressed">#f6f6f6</color>
+    <color name="top_normal_text">#848484</color>
+</resources>
