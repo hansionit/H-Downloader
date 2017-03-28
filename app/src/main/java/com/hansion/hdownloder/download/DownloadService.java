@@ -125,6 +125,19 @@ public class DownloadService extends Service {
      * @param url  下载地址
      */
     private void addDownloadTask(String name, String url) {
+
+        String id = (url).hashCode() + "";
+
+        if(prepareTaskList.contains(id)) {
+            return;
+        }
+
+        DownloadTaskInfo downLoadedList = downloadDAO.getDownLoadedList(id);
+        if(downLoadedList != null && downLoadedList.getDownloadStatus() == DOWNLOAD_STATUS_COMPLETED) {
+            LogUtil.d("该任务已下载：" + url);
+            return;
+        }
+
         if (TextUtils.isEmpty(name)) {
             name = url.substring(url.lastIndexOf("/") + 1);
         }

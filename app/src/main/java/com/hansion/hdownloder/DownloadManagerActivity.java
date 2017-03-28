@@ -149,8 +149,6 @@ public class DownloadManagerActivity extends AppCompatActivity {
 
         @BindView(R.id.mPic)
         ImageView mPic;
-        @BindView(R.id.mType)
-        TextView mType;
         @BindView(R.id.mName)
         TextView mName;
         @BindView(R.id.mNetSpeed)
@@ -190,7 +188,7 @@ public class DownloadManagerActivity extends AppCompatActivity {
 
 
         public void updateFinished() {
-            mNetSpeed.setVisibility(View.INVISIBLE);
+            mNetSpeed.setText("下载完成");
             mProgress.setProgress(100);
 
         }
@@ -203,6 +201,7 @@ public class DownloadManagerActivity extends AppCompatActivity {
             super(view);
             ButterKnife.bind(this, view);
             mProgress.setMax(100);
+            mPic.setImageResource(R.mipmap.ic_launcher);
         }
 
         /**

@@ -70,26 +70,10 @@
                 android:id="@+id/mName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="robosea_001.mp4"
+                android:ellipsize="middle"
+                android:singleLine="true"
                 android:textColor="@color/empty_tip_text"
                 android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2.5dp"
-                android:background="@drawable/list_label_bg"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/mType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="视频"
-                    android:textColor="@color/pressed_text"
-                    android:textSize="9sp" />
-            </LinearLayout>
         </LinearLayout>
 
         <ProgressBar
@@ -118,7 +102,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="1.3MB"
                 android:textColor="#757575"
                 android:textSize="11sp" />
         </RelativeLayout>
