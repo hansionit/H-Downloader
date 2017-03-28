@@ -87,12 +87,11 @@ public class DownloadService extends Service {
     }
 
 
-
-    public void downloadAction(String action,String name,String url) {
+    public void downloadAction(String action, String name, String url) {
 
         switch (action) {
             case ADD_DOWNLOADTASK:          //添加一个下载任务
-                addDownloadTask(name,  url);
+                addDownloadTask(name, url);
                 break;
             case ADD_MULTI_DOWNTASK:        //添加多个下载任务
 
@@ -126,23 +125,27 @@ public class DownloadService extends Service {
      */
     private void addDownloadTask(String name, String url) {
 
-        String id = (url).hashCode() + "";
-
-        if(prepareTaskList.contains(id)) {
-            return;
-        }
-
-        DownloadTaskInfo downLoadedList = downloadDAO.getDownLoadedList(id);
-        if(downLoadedList != null && downLoadedList.getDownloadStatus() == DOWNLOAD_STATUS_COMPLETED) {
-            LogUtil.d("该任务已下载：" + url);
-            return;
-        }
-
         if (TextUtils.isEmpty(name)) {
             name = url.substring(url.lastIndexOf("/") + 1);
         }
 
-        LogUtil.d("添加一个下载任务：" + name);
+        String id = (url).hashCode() + "";
+        if (prepareTaskList.contains(id)) {
+            Toast.makeText(this, "已存在于下载列表中:"+name, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DownloadTaskInfo downLoadedList = downloadDAO.getDownLoadedList(id);
+        if (downLoadedList != null && downLoadedList.getDownloadStatus() == DOWNLOAD_STATUS_COMPLETED) {
+            File file = new File(getSaveDir() + "/" + name);
+            if (file.exists()) {
+                Toast.makeText(this, "该文件已下载:"+name, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
+        Toast.makeText(this, "已添加至下载列表:"+name, Toast.LENGTH_SHORT).show();
 
         DownloadTaskInfo downloadTaskInfo = new DownloadTaskInfo(
                 (url).hashCode() + "",
@@ -192,7 +195,6 @@ public class DownloadService extends Service {
     }
 
 
-
     public String getSaveDir() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File file = new File(SAVE_PATH);
@@ -239,8 +241,9 @@ public class DownloadService extends Service {
                     case DOWNLOAD_STATUS_COMPLETED:     // 下载完毕
                         observer.onFinish(bean);
                         if (prepareTaskList.size() > 0) {
-                            if(currentTask != null)
+                            if (currentTask != null) {
                                 prepareTaskList.remove(currentTask.getID());
+                            }
                         }
                         currentTask = null;
                         downTaskDownloaded++;
@@ -282,7 +285,7 @@ public class DownloadService extends Service {
      * 绑定服务类
      */
     public class DownloadBinder extends Binder {
-        public  DownloadService getService () {
+        public DownloadService getService() {
             return DownloadService.this;
         }
     }
@@ -294,7 +297,7 @@ public class DownloadService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        if(null == mBinder){
+        if (null == mBinder) {
             mBinder = new DownloadBinder();
         }
         return mBinder;
