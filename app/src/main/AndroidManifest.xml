@@ -22,20 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DownloadManagerActivity"></activity>
-
-        <service android:name=".download.DownloadService">
-            <intent-filter>
-                <action android:name="com.hansion.hdownloader.adddownloadtask" />
-                <action android:name="com.hansion.hdownloader.addmultidowntask" />
-                <action android:name="com.hansion.hdownloader.cancledownloadtask" />
-                <action android:name="com.hansion.hdownloader.canclealldownloadtask" />
-                <action android:name="com.hansion.hdownloader.startalldownloadtask" />
-                <action android:name="com.hansion.hdownloader.resumedownloadtask" />
-                <action android:name="com.hansion.hdownloader.pausedownloadtask" />
-                <action android:name="com.hansion.hdownloader.pausealldownloadtask" />
-            </intent-filter>
-        </service>
+        <activity android:name=".DownloadManagerActivity"/>
+        <service android:name=".download.DownloadService"/>
     </application>
 
 </manifest>

@@ -9,10 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.hansion.hdownloder.bean.DownloadTaskInfo;
-import com.hansion.hdownloder.download.DownloadStatusListener;
 import com.hansion.hdownloder.download.HDownloadManager;
-import com.hansion.hdownloder.utils.LogUtil;
 
 public class MainActivity extends AppCompatActivity  implements View.OnClickListener{
 
@@ -44,43 +41,6 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                     return;
                 }
                 HDownloadManager.getInstance().down(url);
-                HDownloadManager.getInstance().setDownloadListener(url, new DownloadStatusListener() {
-                    @Override
-                    public void onPrepare(DownloadTaskInfo bean) {
-                        LogUtil.e("onPrepare");
-                    }
-
-                    @Override
-                    public void onStart(DownloadTaskInfo bean) {
-                        LogUtil.e("onStart");
-                    }
-
-                    @Override
-                    public void onProgress(DownloadTaskInfo bean) {
-                        LogUtil.e("onProgress"+bean.getCompletedSize()+"---"+ bean.getDownloadSpeed());
-                    }
-
-                    @Override
-                    public void onStop(DownloadTaskInfo bean) {
-                        LogUtil.e("onStop");
-                    }
-
-                    @Override
-                    public void onFinish(DownloadTaskInfo bean) {
-                        LogUtil.e("onFinish");
-                    }
-
-                    @Override
-                    public void onError(DownloadTaskInfo bean) {
-                        LogUtil.e("onError");
-                    }
-
-                    @Override
-                    public void onDelete(DownloadTaskInfo bean) {
-                        LogUtil.e("onDelete");
-                    }
-                });
-//                downloadManager.down(MainActivity.this,url);
                 break;
             case R.id.mGoDownloadManager :
                 startActivity(new Intent(this,DownloadManagerActivity.class));

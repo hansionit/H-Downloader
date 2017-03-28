@@ -48,6 +48,12 @@ public class DownloadManagerActivity extends AppCompatActivity {
         mDownloadList.setAdapter(new DownloadListAdapter(this,mDownloadFileInfos));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HDownloadManager.getInstance().removeDownloadListener();
+    }
+
     public class DownloadListAdapter extends CommonBaseAdapter<FileViewHolder, DownloadTaskInfo> {
         private SparseArray<FileViewHolder> mViewHolderArray;
 
@@ -60,8 +66,7 @@ public class DownloadManagerActivity extends AppCompatActivity {
         @Override
         public FileViewHolder onCreateViewHolder(ViewGroup parent, int position) {
             View view = inflate(R.layout.item_download, parent);
-            FileViewHolder holder = new FileViewHolder(view);
-            return holder;
+            return new FileViewHolder(view);
         }
 
         @Override
@@ -69,6 +74,7 @@ public class DownloadManagerActivity extends AppCompatActivity {
             DownloadTaskInfo downloadFileInfo = mDownloadFileInfos.get(position);
             holder.setDownloadId(Integer.parseInt(downloadFileInfo.getDownloadId()));
             mViewHolderArray.put(Integer.parseInt(downloadFileInfo.getDownloadId()), holder);
+            holder.mName.setText(downloadFileInfo.getName());
             HDownloadManager.getInstance().setDownloadListener(downloadFileInfo.getDownloadId(), downloadStatusListener);
         }
 
@@ -94,7 +100,10 @@ public class DownloadManagerActivity extends AppCompatActivity {
                 if (holder == null) {
                     return;
                 }
-                holder.updateDownloading((int) (100 * bean.getCompletedSize() / bean.getTotalSize()), bean.getDownloadSpeed());
+                holder.updateDownloading(
+                        (int) (100 * bean.getCompletedSize() / bean.getTotalSize()),
+                        bean.getDownloadSpeed(),
+                        bean.getTotalSize());
             }
 
             @Override
@@ -103,8 +112,10 @@ public class DownloadManagerActivity extends AppCompatActivity {
                 if (holder == null) {
                     return;
                 }
-                holder.updateDownloading((int) (100 * bean.getCompletedSize() / bean.getTotalSize()), bean.getDownloadSpeed());
-                LogUtil.e(((int) (100 * bean.getCompletedSize() / bean.getTotalSize())+""));
+                holder.updateDownloading(
+                        (int) (100 * bean.getCompletedSize() / bean.getTotalSize()),
+                        bean.getDownloadSpeed(),
+                        bean.getTotalSize());
             }
 
             @Override
@@ -134,31 +145,6 @@ public class DownloadManagerActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-    /**
-     * 换算文件的大小
-     */
-    public static String FormetFileSize(long fileSize) {// 转换文件大小
-        if (fileSize <= 0) {
-            return "0M";
-        }
-        DecimalFormat df = new DecimalFormat("#.00");
-        String fileSizeString = "";
-        if (fileSize < 1024) {
-            fileSizeString = df.format((double) fileSize) + "B";
-        } else if (fileSize < 1048576) {
-            fileSizeString = df.format((double) fileSize / 1024) + "K";
-        } else if (fileSize < 1073741824) {
-            fileSizeString = df.format((double) fileSize / 1048576) + "M";
-        } else {
-            fileSizeString = df.format((double) fileSize / 1073741824) + "G";
-        }
-        return fileSizeString;
-    }
-
     static class FileViewHolder extends CommonBaseAdapter.ViewHolder {
 
         @BindView(R.id.mPic)
@@ -181,20 +167,32 @@ public class DownloadManagerActivity extends AppCompatActivity {
         CheckBox checkbox;
 
         private int id;
+        private boolean setInitValue = false;
+
+        public void setInitValue (Long totalSize) {
+            if(!setInitValue && totalSize > 0) {
+                mFileSize.setText(FormetFileSize(totalSize));
+                setInitValue = true;
+            }
+        }
 
         public void setDownloadId(final int id) {
             this.id = id;
         }
 
-        public void updateDownloading(int progress, long speed) {
+        public void updateDownloading(int progress, long speed,Long totalSize) {
             mProgress.setProgress(progress);
             mNetSpeed.setVisibility(View.VISIBLE);
             mNetSpeed.setText(FormetFileSize(speed * 1024)+"/s");
+            setInitValue(totalSize);
+            LogUtil.i(FormetFileSize(speed * 1024)+"/s");
         }
 
 
         public void updateFinished() {
+            mNetSpeed.setVisibility(View.INVISIBLE);
             mProgress.setProgress(100);
+
         }
 
         public void updateWait(int progress) {
@@ -205,6 +203,27 @@ public class DownloadManagerActivity extends AppCompatActivity {
             super(view);
             ButterKnife.bind(this, view);
             mProgress.setMax(100);
+        }
+
+        /**
+         * 换算文件的大小
+         */
+        public static String FormetFileSize(long fileSize) {// 转换文件大小
+            if (fileSize <= 0) {
+                return "0M";
+            }
+            DecimalFormat df = new DecimalFormat("#.00");
+            String fileSizeString = "";
+            if (fileSize < 1024) {
+                fileSizeString = df.format((double) fileSize) + "B";
+            } else if (fileSize < 1048576) {
+                fileSizeString = df.format((double) fileSize / 1024) + "K";
+            } else if (fileSize < 1073741824) {
+                fileSizeString = df.format((double) fileSize / 1048576) + "M";
+            } else {
+                fileSizeString = df.format((double) fileSize / 1073741824) + "G";
+            }
+            return fileSizeString;
         }
     }
 

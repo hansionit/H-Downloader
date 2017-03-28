@@ -74,6 +74,10 @@ public class DownloadTask implements Runnable {
     }
 
 
+    public String getID() {
+        return this.downloadId;
+    }
+
     @Override
     public void run() {
         //准备下载

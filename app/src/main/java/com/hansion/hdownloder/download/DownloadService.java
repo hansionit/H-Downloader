@@ -75,6 +75,9 @@ public class DownloadService extends Service {
     //同时只允许一条线程执行的线程池
     private ExecutorService executorService;
 
+    private int downTaskDownloaded = -1;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -123,7 +126,7 @@ public class DownloadService extends Service {
      */
     private void addDownloadTask(String name, String url) {
         if (TextUtils.isEmpty(name)) {
-            name = File.separator + url.substring(url.lastIndexOf("/") + 1);
+            name = url.substring(url.lastIndexOf("/") + 1);
         }
 
         LogUtil.d("添加一个下载任务：" + name);
@@ -171,6 +174,7 @@ public class DownloadService extends Service {
                 return;
             }
             executorService.submit(downloadTask);
+            currentTask = downloadTask;
         }
     }
 
@@ -221,6 +225,13 @@ public class DownloadService extends Service {
                         break;
                     case DOWNLOAD_STATUS_COMPLETED:     // 下载完毕
                         observer.onFinish(bean);
+                        if (prepareTaskList.size() > 0) {
+                            if(currentTask != null)
+                                prepareTaskList.remove(currentTask.getID());
+                        }
+                        currentTask = null;
+                        downTaskDownloaded++;
+                        startTask();
                         break;
                     case DOWNLOAD_STATUS_ERROR:         // 下载失败
                         observer.onError(bean);
