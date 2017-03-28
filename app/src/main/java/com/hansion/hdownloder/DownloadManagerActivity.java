@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 
 public class DownloadManagerActivity extends AppCompatActivity {
 
-    private static final String TAG = "Main2Activity";
     private ListView mDownloadList;
     private DownloadDAO downloadDao;
     public List<DownloadTaskInfo> mDownloadFileInfos = new ArrayList<>();

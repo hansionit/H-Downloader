@@ -11,12 +11,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-
-/**
- * Desction:
- * Author:pengjianbo
- * Date:15/9/26 下午8:05
- */
 public abstract class CommonBaseAdapter<VH extends CommonBaseAdapter.ViewHolder, T> extends BaseAdapter {
 
     protected Context mContext;

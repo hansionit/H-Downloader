@@ -9,7 +9,6 @@ import android.os.Environment;
  */
 public class Constant {
 
-    public static String PACKAGE = "com.hansion.hdownloder";
     //下载文件默认存储位置
     public static final String SAVE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/robodownload/";
 }
