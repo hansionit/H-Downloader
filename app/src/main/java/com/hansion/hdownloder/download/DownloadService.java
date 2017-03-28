@@ -177,6 +177,7 @@ public class DownloadService extends Service {
             LogUtil.d("start task wrong, current task is running");
             return;
         }
+
         if (prepareTaskList.size() > 0) {
             DownloadTask downloadTask = null;
             //根据下载队列中第一位的id从数据库中取出该任务的信息
